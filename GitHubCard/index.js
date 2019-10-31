@@ -91,39 +91,43 @@ function createCard(data) {
 
 const cards = document.querySelector(".cards");
 
-let users = ["tetondan", "dustinmyers", "justsml", "luishrd", "bigknell"];
+// let users = ["tetondan", "dustinmyers", "justsml", "luishrd", "bigknell", "Darragh1996"];
 
-for (let i = 0; i < users.length; i++) {
-  let search = `https://api.github.com/users/`;
-  search += users[i];
-  axios
-    .get(search)
-    .then(response => {
-      cards.append(createCard(response.data));
-    })
-    .catch(error => {
-      console.log(error);
-    });
-}
+// for (let i = 0; i < users.length; i++) {
+//   let search = `https://api.github.com/users/`;
+//   search += users[i];
+//   axios
+//     .get(search)
+//     .then(response => {
+//       cards.append(createCard(response.data));
+//     })
+//     .catch(error => {
+//       console.log(error);
+//     });
+// }
 
-// const followersArray = [];
+const followersArray = [];
 
-// axios.get('https://api.github.com/users/tetondan/followers')
-//   .then(response =>{
-//     for(let i = 0; i < response.data.length; i++){
-//       followersArray.push(response.data[i].login)
-//     }
-//   }).catch(error =>{
-//     console.log(error);
-//   })
+axios.get('https://api.github.com/users/tetondan/followers')
+  .then(response =>{
+    for(let i = 0; i < response.data.length; i++){
+      followersArray.push(response.data[i].login)
+    }
+    return followersArray;
+  }).then(data =>{
+    for(let i = 0; i < data.length; i++){
+      let search = `https://api.github.com/users/`;
+      search += data[i];
+      axios.get(search)
+        .then(res => {
+          cards.append(createCard(res.data));
+        }).catch(err =>{
+          console.log(err);
+        })
+    }
+  })
+  .catch(error =>{
+    console.log(error);
+  })
 
-//   for(let i = 0; i < followersArray.length; i++){
-//     let search = `https://api.github.com/users/`;
-//     search += followersArray[i];
-//     axios.get(search)
-//       .then(res => {
-//         cards.append(createCard(res.data));
-//       }).catch(err =>{
-//         console.log(err);
-//       })
-//   }
+  
